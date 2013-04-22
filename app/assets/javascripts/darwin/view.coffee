@@ -330,6 +330,7 @@ class Darwin.View extends Darwin.Base
       if $element.get(0)
         @[ "$#{selector_name}" ] = $element
         @_cached[ selector_name ] = true
+        $element
       else
         throw new Error "Selector not found : #{selector_name}"
 
