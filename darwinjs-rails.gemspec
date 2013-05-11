@@ -19,6 +19,8 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   spec.add_dependency 'railties', '~> 3.2'
+  spec.add_dependency 'coffee-rails', '~> 3.2'
+  spec.add_dependency 'jquery-rails', '~> 2.2'
   spec.add_development_dependency "bundler", "~> 1.3"
   spec.add_development_dependency "rake"
 end

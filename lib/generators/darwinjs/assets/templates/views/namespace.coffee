@@ -1,0 +1,2 @@
+App.Views.<%= @namespace %> = {}
+
