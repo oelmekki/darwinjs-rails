@@ -7,9 +7,9 @@ module Darwinjs
 
       def create_module
         if is_resource?
-          ResourceGenerator.new( name, self ).process
+          create_resource
         else
-          ActionGenerator.new( name, self ).process
+          create_action( ( class_path + [ file_name ] ).join( '/' ) )
         end
       end
 
@@ -19,79 +19,59 @@ module Darwinjs
         name.underscore != name
       end
 
-      class JsModuleGenerator
-        attr_reader :name, :base_generator
-
-        def initialize( name, base_generator )
-          @name, @base_generator = name, base_generator
-        end
-
-        def method_missing( method_name, *args, &block )
-          base_generator.send( method_name, *args, &block )
+      def create_resource
+        %w[index edit show new form].each do |action|
+          create_action( ( class_path + [ file_name.pluralize, action ] ).join( '/' ) )
         end
       end
 
-      class ResourceGenerator < JsModuleGenerator
-        def process
-          %w[index edit show new form].each do |action|
-            ActionGenerator.new( "#{name.pluralize.underscore}/#{action}", base_generator ).process
+      def create_action( action )
+        create_namespaces( action )
+        create_controller( action )
+        create_view( action )
+      end
+
+      def create_namespaces( action )
+        current_path = []
+
+        namespaces_for( action ).each do |namespace|
+          current_path << namespace
+          namespace_dir  = current_path.join( '/' )
+          namespace_file = namespace_dir + '.coffee'
+          @namespace = current_path.map( &:camelize ).join( '.' )
+
+          unless File.exists?( controllers_path.join( namespace_file ) )
+            template 'controllers/namespace.coffee', controllers_path.join( namespace_file ).to_s
+          end
+
+          unless File.exists?( views_path.join( namespace_file ) )
+            template 'views/namespace.coffee', views_path.join( namespace_file ).to_s
           end
         end
       end
 
-      class ActionGenerator < JsModuleGenerator
-        def process
-          create_namespaces
-          create_controller
-          create_view
-        end
+      def create_controller( action )
+        @js_path = action.split( '/' ).map( &:camelize ).join( '.' )
+        template 'controllers/controller.coffee', controllers_path.join( "#{action}.coffee" )
+      end
 
-        private
+      def create_view( action )
+        @js_path = action.split( '/' ).map( &:camelize ).join( '.' )
+        template 'views/view.coffee', views_path.join( "#{action}.coffee" )
+      end
 
-        def create_namespaces
-          current_path = []
+      def namespaces_for( action )
+        parts = action.split( '/' )
+        parts.pop
+        parts
+      end
 
-          namespaces.each do |namespace|
-            current_path << namespace
-            namespace_dir  = current_path.join( '/' )
-            namespace_file = namespace_dir + '.coffee'
-            @namespace = current_path.map( &:camelize ).join( '.' )
+      def controllers_path
+        @controllers_path ||= ::Rails.root.join( 'app', 'assets', 'javascripts', 'controllers' )
+      end
 
-            unless File.exists?( controllers_path.join( namespace_file ) )
-              template 'controllers/namespace.coffee', controllers_path.join( namespace_file ).to_s
-            end
-
-            unless File.exists?( views_path.join( namespace_file ) )
-              template 'views/namespace.coffee', views_path.join( namespace_file ).to_s
-            end
-          end
-        end
-
-        def create_controller
-          @js_path = name.split( '/' ).map( &:camelize ).join( '.' )
-          template 'controllers/controller.coffee', controllers_path.join( "#{name}.coffee" )
-        end
-
-        def create_view
-          @js_path = name.split( '/' ).map( &:camelize ).join( '.' )
-          template 'views/view.coffee', views_path.join( "#{name}.coffee" )
-        end
-
-        def namespaces
-          @namespaces ||= begin
-            parts = name.split( '/' )
-            parts.pop
-            parts
-          end
-        end
-
-        def controllers_path
-          @controllers_path ||= ::Rails.root.join( 'app', 'assets', 'javascripts', 'controllers' )
-        end
-
-        def views_path
-          @views_path ||= ::Rails.root.join( 'app', 'assets', 'javascripts', 'views' )
-        end
+      def views_path
+        @views_path ||= ::Rails.root.join( 'app', 'assets', 'javascripts', 'views' )
       end
     end
   end
