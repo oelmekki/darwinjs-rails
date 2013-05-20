@@ -47,9 +47,9 @@
 # ```
 #
 # Now, what if you decide user list should be called `#user_list`
-# rather than `.users` and should in the article rather than in
+# rather than `.users` and should be in the article rather than in
 # sidebar ? You have to browse your whole codebase to change selectors,
-# possibly missing some and causing crash.
+# possibly missing a few and causing crashes.
 #
 # Darwin.View acts as a center point of configuration for selectors :
 #

@@ -15,7 +15,7 @@
 # nothing if it doesn't find the element.
 #
 # It's not ok. If you do that, DOM will be hit to find the element
-# on every single page. Hitting the DOM is expensive, you should not
+# on every single page. Hitting the DOM is expansive, you should not
 # do it if it's not necessary. When you'll have 100 controllers in
 # your app and DOM hitted 100 times on each page load to find module
 # elements, slow js engines will begin to suffer before you actually
@@ -52,7 +52,7 @@
 #
 # Darwin takes error handling seriously. The default behavior is to
 # deactivate javascript app on any error occuring in it. If your app
-# code produce an error, all its event callback are deactivated and
+# code produce an error, all its event callbacks are deactivated and
 # controllers' destructor methods are called. This is a good thing.
 #
 # Consider the following :
