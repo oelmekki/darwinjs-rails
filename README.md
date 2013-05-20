@@ -1,4 +1,4 @@
-# Darwinjs::Rails
+# Darwinjs
 
 Darwin is a javascript framework for people that take error
 handling seriously and want to achieve it through progressive
@@ -23,7 +23,16 @@ Or install it yourself as:
 
 ## Getting Started
 
-You can generate a javascript module using the provided
+First, as one time configuration, add autoloader in your
+application.coffee file :
+
+```
+$(->
+  Darwin.Loader.run()
+)
+```
+
+You can now generate a javascript module using the provided
 generator :
 
 ```
@@ -36,14 +45,6 @@ $ rails generate darwin:assets users/index
 ```
 
 This will create your controller and your view in the `users` namespace.
-
-Add autoloader in your application.coffee file :
-
-```
-$(->
-  Darwin.Loader.run()
-)
-```
 
 Now add a `data-module` attribute in your users index view to
 autoload your module :
@@ -68,7 +69,7 @@ A module is composed of two files :
 Here is a typical view :
 
 ```coffee
-class App.Controllers.Users.Index extends Darwin.Controller
+class App.Views.Users.Index extends Darwin.Controller
   @options {
     selectors:
       show_users: 'a#show_users'
@@ -133,7 +134,7 @@ deactivated and any link is followed, reloading the page and letting
 server side handle what has to be done, so your user doesn't even
 notice something got wrong.
 
-Ready for more ? See [introduction](wiki/Introduction).
+Ready for more ? See [introduction](doc/introduction.md).
 
 ## Contributing
 
