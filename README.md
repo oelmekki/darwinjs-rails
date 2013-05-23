@@ -26,7 +26,11 @@ Or install it yourself as:
 First, as one time configuration, add autoloader in your
 application.coffee file :
 
-```
+```coffee
+#= require 'darwin'
+#= require_tree ./views
+#= require_tree ./controllers
+
 $(->
   Darwin.Loader.run()
 )
