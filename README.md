@@ -117,7 +117,7 @@ class App.Controllers.Users.Index extends Darwin.Controller
 ```
 
 As you see, a view acts as single point of configuration for selectors.
-Any change needed then reflect to the whole javascript codebase.
+Any change made then reflect to the whole javascript codebase.
 
 In the same way, controller acts as a single point of configuration
 for events. You can tell what a module does looking at the first
