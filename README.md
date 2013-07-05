@@ -73,7 +73,7 @@ A module is composed of two files :
 Here is a typical view :
 
 ```coffee
-class App.Views.Users.Index extends Darwin.Controller
+class App.Views.Users.Index extends Darwin.View
   @options {
     selectors:
       show_users: 'a#show_users'
