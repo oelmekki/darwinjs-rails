@@ -46,7 +46,7 @@ controllers/, as controllers depend on views.
 You can easily create a module using the generator provided :
 
 ```
-$ rails generate darwin admin_area/users/index
+$ rails generate darwinjs:assets admin_area/users/index
 
       create  app/assets/javascripts/controllers/admin_area.coffee
       create  app/assets/javascripts/views/admin_area.coffee
