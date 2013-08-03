@@ -56,7 +56,10 @@ class Darwin.Controller extends Darwin.Base
 
             $target = $target.parents( sel ).first() unless $target.is( sel )
 
-          callback( $target, event )
+          args = [ $target, event ]
+          args.push arguments[i] for i in [1..(arguments.length - 1)] if arguments.length > 1
+
+          callback( args... )
 
     definition.stop = true if definition.type == 'click' and ! definition.stop?
 
