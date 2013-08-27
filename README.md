@@ -70,28 +70,31 @@ A module is composed of two files :
 * a controller that handles events
 * a view that handles DOM manipulation
 
-Here is a typical view :
+
+The minimal controller you could write is as this :
 
 ```coffee
-class App.Views.Users.Index extends Darwin.View
-  @options {
-    selectors:
-      show_users: 'a#show_users'
-      user_block: '#users'
-      user:
-        'sel': '.user'
-        more: '.more a'
-        delete: 'a[data-method="delete"]'
-  }
-
-  show_info_for( $link ) ->
-    $link.next( '.info' ).show()
-
-  remove_user_for( $link ) ->
-    $link.parent().remove()
+class App.Controllers.MyModule extends Darwin.Controller
+  run: ->
+    alert( 'hello' )
 ```
 
-And the corresponding controller :
+And bind it to your html file :
+
+```html
+<div id="my-block" data-module="MyModule"></div>
+```
+
+With just that, you've already leveraged an important performance tweak from
+Darwin over `if $('#my_block').length then alert( 'hello' )` : instead of
+querying the dom on every page of your application to find `#my_block`, a
+single query will be issued to retrieve `*[data-module]` and initialize their
+module. Just think of how many DOM queries that returns nothing you fire on
+your typical page. `$('#not-existing')` does not do nothing, it browses the
+whole DOM to retrieve a non-existing element. That's a performance issue.
+
+But a controller can do way more than that. Its whole purpose is to encapsulate interruptions - events and requests.
+
 
 ```coffee
 class App.Controllers.Users.Index extends Darwin.Controller
@@ -120,23 +123,84 @@ class App.Controllers.Users.Index extends Darwin.Controller
       )
 ```
 
-As you see, a view acts as single point of configuration for selectors.
-Any change made then reflect to the whole javascript codebase.
+Events declaration are grouped in the option hash, with a human readable description, so that any developer can understand at a glance what the controller is doing. An event declaration is typically made of a descriptive string and of configuration object :
 
-In the same way, controller acts as a single point of configuration
-for events. You can tell what a module does looking at the first
-lines of the controller file.
+```coffee
+'Description': { el: 'element_name', type: 'event_type' }
+```
 
-But there is more happening under the hood, here. First, all you DOM
-elements retrieved by view selectors are cached. Upon further call
-they are retrieved without hitting the DOM again, which is very
-costly in term of performances.
+The callback method name is inferred from event configuration, using
+`<element_name>_<event_type>(ed|d)`. The element (extended with jQuery) is
+passed as first argument, and the raw event is passed as second.
 
-Furthermore, all event callbacks are wrapped so that they do not
-execute if an error occured. In case of error, events are simply
-deactivated and any link is followed, reloading the page and letting
-server side handle what has to be done, so your user doesn't even
-notice something got wrong.
+Beside that, declaring events that way rather than directly with jQuery has a
+massive advantage : all callback functions are wrapped in a function that will
+prevent them to run if a crash occurs. It means that if you have a `<a
+href="/foo"></a>` with a click event on it and a crash occurs, clicking it
+again will not trigger event, and link will be followed. This ensure you can
+have fallback features to handle javascript errors and reload the page.
+
+
+Finally, views are meant for all DOM manipulation and acts as a single point of
+configuration for selectors. In previous controller example, we've used element
+names "show_user", "user_more", "user_delete", "user_block", etc. Very often in
+a module, you will refer an element more than one time. It means that if your
+html change, you've got to track all selectors used to find what you have to
+change.
+
+This is not a problem with Darwin, as selectors are all configured in the same
+place, without any repeatition :
+
+```coffee
+class App.Views.Users.Index extends Darwin.View
+  @options {
+    selectors:
+      show_users: 'a#show_users'
+      user_block: '#users'
+      user:
+        'sel': '.user'
+        more: '.more a'
+        delete: 'a[data-method="delete"]'
+  }
+
+  show_info_for( $link ) ->
+    $link.next( '.info' ).show()
+
+  remove_user_for( $link ) ->
+    $link.parent().remove()
+```
+
+The `selectors` options hash list all selectors used by module. They can be
+declared right away or through a 'sel' key, which then allow to use nested
+selectors. This system also offer a performance bonus : all elements retrieved
+with these selectors are cached by default, because it's the desired behavior,
+most of the time (you can pass option `cache: false` to a specific selector not
+to cache its result). Selectors can be used with `get()` view method :
+`@get('user_more')`.
+
+Beside selectors configuration, views are responsible for DOM manipulation. It
+means that controllers call views upon interuptions to alter page content (like
+the two methods in previous view, used by previous controller). It also means
+that views are responsible for setting up and tearing down the page, reflecting
+progressive enhancement and graceful degradation :
+
+```coffee
+class App.Views.MyModule extends Darwin.View
+  @options {
+    selectors:
+      submit: 'input[type="submit"]'
+  }
+
+  run: ->
+    @get( 'submit' ).hide()
+
+
+  destructor: ->
+    @get( 'submit' ).show()
+```
+
+As you would expect, `run()` is called on dom ready event, and `destructor()`
+is called when a crash occurs.
 
 Ready for more ? See [introduction](doc/introduction.md).
 
