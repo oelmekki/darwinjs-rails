@@ -23,6 +23,8 @@ Or install it yourself as:
 
 ## Getting Started
 
+### Autoloader
+
 First, as one time configuration, add autoloader in your
 application.coffee file :
 
@@ -35,6 +37,9 @@ $(->
   Darwin.Loader.run()
 )
 ```
+
+
+### Generator
 
 You can now generate a javascript module using the provided
 generator :
@@ -71,6 +76,8 @@ A module is composed of two files :
 * a view that handles DOM manipulation
 
 
+### Controller
+
 The minimal controller you could write is as this :
 
 ```coffee
@@ -93,7 +100,8 @@ module. Just think of how many DOM queries that returns nothing you fire on
 your typical page. `$('#not-existing')` does not do nothing, it browses the
 whole DOM to retrieve a non-existing element. That's a performance issue.
 
-But a controller can do way more than that. Its whole purpose is to encapsulate interruptions - events and requests.
+But a controller can do way more than that. Its whole purpose is to encapsulate
+interruptions - events and requests.
 
 
 ```coffee
@@ -123,7 +131,10 @@ class App.Controllers.Users.Index extends Darwin.Controller
       )
 ```
 
-Events declaration are grouped in the option hash, with a human readable description, so that any developer can understand at a glance what the controller is doing. An event declaration is typically made of a descriptive string and of configuration object :
+Events declaration are grouped in the option hash, with a human readable
+description, so that any developer can understand at a glance what the
+controller is doing. An event declaration is typically made of a descriptive
+string and of configuration object :
 
 ```coffee
 'Description': { el: 'element_name', type: 'event_type' }
@@ -140,6 +151,8 @@ href="/foo"></a>` with a click event on it and a crash occurs, clicking it
 again will not trigger event, and link will be followed. This ensure you can
 have fallback features to handle javascript errors and reload the page.
 
+
+### View
 
 Finally, views are meant for all DOM manipulation and acts as a single point of
 configuration for selectors. In previous controller example, we've used element
