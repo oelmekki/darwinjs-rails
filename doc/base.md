@@ -144,4 +144,5 @@ my_instance.do_something()  # logs : 'I did something.'
 MyClass.foo()               # logs : 'foo'
 ```
 
-
+Beware though, there is a major difference with ruby modules : context is *not*
+preserved. That means you can't use `@` in your included or extended methods.
