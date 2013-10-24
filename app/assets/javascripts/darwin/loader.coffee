@@ -6,18 +6,24 @@ errors_got = 0
 loader = Darwin.Loader =
   run: ->
     loader.module_roots().each( ( i, $module ) =>
-      $module     = $( $module )
-      module_name = loader.compute_name( $module.attr( 'data-module' ) )
-      path        = $module.attr( 'data-module' ).split( '.' )
-      module      = App.Controllers
-      module      = module[ path.shift() ] while path.length
-
-      if module
-        controllers[ module_name ]    = new module( $module )
-        controllers[ module_name ].id = module_name
-      else
-        throw new Error( "Can't find module #{$module.attr( 'data-module' )}" )
+      $module = $( $module )
+      loader.load_module( $module.attr( 'data-module' ), $module )
     )
+
+
+  load_module: ( pathname, $root ) ->
+    module_name = loader.compute_name( pathname )
+    path        = pathname.split( '.' )
+    module      = App.Controllers
+    module      = module[ path.shift() ] while path.length
+
+    if module
+      controllers[ module_name ]    = new module( $root )
+      controllers[ module_name ].id = module_name
+    else
+      throw new Error( "Can't find module #{pathname}" )
+
+    controllers[ module_name ]
 
 
   module_roots: ->
