@@ -52,9 +52,12 @@ class Darwin.Controller extends Darwin.Base
             if el == 'root'
               sel = 'root'
             else
-              sel = ( @view.selectors[ el ] or @view._find_alternate_name( el ) ).sel
+              sel = ( @view.selectors[ el ] or @view._find_alternate_name( el ) )?.sel
 
-            $target = $target.parents( sel ).first() unless $target.is( sel )
+              if sel
+                $target = $target.parents( sel ).first() unless $target.is( sel )
+              else
+                $target = @view.get( el )
 
           args = [ $target, event ]
           args.push arguments[i] for i in [1..(arguments.length - 1)] if arguments.length > 1
