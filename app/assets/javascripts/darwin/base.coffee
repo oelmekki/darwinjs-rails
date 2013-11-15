@@ -71,5 +71,5 @@ class Darwin.Base
 
   trigger: ( event_name, params... ) ->
     if @_bound[ event_name ]
-      for own callback in @_bound[ event_name ]
+      for callback in @_bound[ event_name ]
         callback( params... )
