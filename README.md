@@ -45,7 +45,7 @@ You can now generate a javascript module using the provided
 generator :
 
 ```
-$ rails generate darwin:assets users/index
+$ rails generate darwinjs:assets users/index
 
       create  app/assets/javascripts/controllers/users.coffee
       create  app/assets/javascripts/views/users.coffee
