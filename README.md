@@ -117,7 +117,7 @@ class App.Controllers.Users.Index extends Darwin.Controller
 
 
   show_users_clicked: ->
-    @view.get( 'user_block' ).fadeIn()
+    @view.hide_user()
 
 
   user_more_clicked: ( $link ) ->
@@ -176,6 +176,9 @@ class App.Views.Users.Index extends Darwin.View
         delete: 'a[data-method="delete"]'
   }
 
+  hide_user: ->
+    @get( 'user_block' ).fadeIn()
+
   show_info_for( $link ) ->
     $link.next( '.info' ).show()
 
@@ -193,7 +196,7 @@ to cache its result). Selectors can be used with `get()` view method :
 
 Beside selectors configuration, views are responsible for DOM manipulation. It
 means that controllers call views upon interuptions to alter page content (like
-the two methods in previous view, used by previous controller). It also means
+the three methods in previous view, used by previous controller). It also means
 that views are responsible for setting up and tearing down the page, reflecting
 progressive enhancement and graceful degradation :
 
