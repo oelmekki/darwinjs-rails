@@ -250,6 +250,31 @@ You probably should use delegation to filter what you want
 more precisely, though.
 
 
+# Global events
+
+Sometime, you may want to allow modules to communicate with each others. How to
+achieve this ? 
+
+You could use `Darwin.controllers()` to retrieve foreign module and call one of
+its methods, but it would violate law of demeter.
+
+You could trigger an event on an element from other module, but now, you
+violate selector centralization.
+
+There's an other mean for that : you can use Darwin global events. To do so,
+trigger event like this :
+
+    Darwin.trigger( 'my_event_call' )
+
+
+The receiver can use special `darwin` element in its events declaration :
+
+    'Answer to global event': { el: 'darwin', type: 'my_event_call' }
+
+The usual controller event handling will apply then, calling a
+`darwin_my_event_called`, here.
+
+
 # Progressive enhancement and graceful degradation
 
 Like Darwin.View, Darwin.Controller has a `run()` and
