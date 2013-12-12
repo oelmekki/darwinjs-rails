@@ -4,6 +4,7 @@
 #= require './darwin/template'
 #= require './darwin/view'
 #= require './darwin/controller'
+#= require './darwin/events'
 #
 # Documentation is in /doc/introduction.md
 #
