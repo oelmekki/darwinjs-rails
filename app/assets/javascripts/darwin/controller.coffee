@@ -64,9 +64,9 @@ class Darwin.Controller extends Darwin.Base
 
       if definition.cancel_delay and definition.cancel_delay > 0
         callback = ( event ) =>
-          window.clearTimeout @[ '_' + method_name + '_timeout' ]
+          window.clearTimeout $element.data( "_#{method_name}_timeout" )
           wrapped = wrap( method, definition )
-          @[ '_' + method_name + '_timeout' ] = window.setTimeout( ( -> ( wrapped event ) ), definition.cancel_delay )
+          $element.data( "_#{method_name}_timeout", window.setTimeout( ( -> ( wrapped event ) ), definition.cancel_delay ) )
       else
         callback = wrap method, definition
 
@@ -76,9 +76,9 @@ class Darwin.Controller extends Darwin.Base
     else
       if definition.cancel_delay and definition.cancel_delay > 0
         callback = ( event ) =>
-          window.clearTimeout @[ '_' + method_name + '_timeout' ]
+          window.clearTimeout $element.data( "_#{method_name}_timeout" )
           wrapped = wrap( method, definition )
-          @[ '_' + method_name + '_timeout' ] = window.setTimeout( ( -> ( wrapped event ) ), definition.cancel_delay )
+          $element.data( "_#{method_name}_timeout", window.setTimeout( ( -> ( wrapped event ) ), definition.cancel_delay ) )
       else
         callback = wrap method, definition
 
