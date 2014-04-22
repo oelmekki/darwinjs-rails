@@ -47,7 +47,7 @@ loader = Darwin.Loader =
     controllers
 
 previous_onerror = window.onerror
-window.onerror = ( error, url, lineno ) =>
+window.onerror = ( error, url, lineno, error_object ) =>
   if url && url.match( /https?:\/\/.*?assets/ )
     @crashed = true
     console?.log( "Error on #{url}, line #{lineno}" )
@@ -59,4 +59,4 @@ window.onerror = ( error, url, lineno ) =>
     for own controller_name, controller of controllers
       controller.destructor() if controller.options.failsafe is true
 
-  if previous_onerror then previous_onerror( error, url, lineno ) else error
+  if previous_onerror then previous_onerror( error, url, lineno, error_object ) else error
