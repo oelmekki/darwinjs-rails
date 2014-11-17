@@ -41,12 +41,23 @@ is equivalent to :
 new App.Controllers.AdminArea.Users.Show( $( '#users' ) )
 ```
 
-To start, loader, add this in your application code :
+To start loader, add this in your application code :
 
 ```coffee
 Darwin.Loader.run()
 ```
 
+## Loading modules after DOM ready
+
+Darwin.Loader.run will be triggered on DOM ready. But what if you
+load some nodes on ajax that needs other modules ? You could run
+`Darwin.Loader.run()` again but that would reload already loaded
+modules.
+
+To load only modules inside a given node :
+```coffee
+Darwin.Loader.run( $element )
+```
 
 # Error handling
 
