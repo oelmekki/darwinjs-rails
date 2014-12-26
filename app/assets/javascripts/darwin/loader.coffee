@@ -5,11 +5,13 @@ errors_got = 0
 
 loader = Darwin.Loader =
   run: ->
-    loader.module_roots().each( ( i, $module ) =>
+    loader.load_modules()
+
+  load_modules: ( $element = $ )
+    $element.find( '*[data-module]' ).each( ( i, $module ) =>
       $module = $( $module )
       loader.load_module( $module.attr( 'data-module' ), $module )
     )
-
 
   load_module: ( pathname, $root ) ->
     module_name = loader.compute_name( pathname )
@@ -24,11 +26,6 @@ loader = Darwin.Loader =
       throw new Error( "Can't find module #{pathname}" )
 
     controllers[ module_name ]
-
-
-  module_roots: ->
-    $( '*[data-module]' )
-
 
   compute_name: ( module_path ) ->
     name = module_path.replace( /\./g, '_' ).toLowerCase()
