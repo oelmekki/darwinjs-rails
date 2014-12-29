@@ -7,7 +7,7 @@ loader = Darwin.Loader =
   run: ->
     loader.load_modules()
 
-  load_modules: ( $element = $ )
+  load_modules: ( $element = $ ) ->
     $element.find( '*[data-module]' ).each( ( i, $module ) =>
       $module = $( $module )
       loader.load_module( $module.attr( 'data-module' ), $module )
