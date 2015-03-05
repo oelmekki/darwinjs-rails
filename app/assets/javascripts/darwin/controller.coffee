@@ -66,7 +66,7 @@ class Darwin.Controller extends Darwin.Base
         callback = ( event ) =>
           window.clearTimeout $element.data( "_#{method_name}_timeout" )
           wrapped = wrap( method, definition )
-          $element.data( "_#{method_name}_timeout", window.setTimeout( ( -> ( wrapped event ) ), definition.cancel_delay ) )
+          $element.data( "_#{method_name}_timeout", window.setTimeout( ( -> ( wrapped arguments ) ), definition.cancel_delay ) )
       else
         callback = wrap method, definition
 
@@ -78,7 +78,7 @@ class Darwin.Controller extends Darwin.Base
         callback = ( event ) =>
           window.clearTimeout $element.data( "_#{method_name}_timeout" )
           wrapped = wrap( method, definition )
-          $element.data( "_#{method_name}_timeout", window.setTimeout( ( -> ( wrapped event ) ), definition.cancel_delay ) )
+          $element.data( "_#{method_name}_timeout", window.setTimeout( ( -> ( wrapped arguments ) ), definition.cancel_delay ) )
       else
         callback = wrap method, definition
 
