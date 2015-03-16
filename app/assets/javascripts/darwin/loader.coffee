@@ -11,14 +11,14 @@ loader = Darwin.Loader =
     )
 
 
-  load_module: ( pathname, $root ) ->
+  load_module: ( pathname, $root, options ) ->
     module_name = loader.compute_name( pathname )
     path        = pathname.split( '.' )
     module      = App.Controllers
     module      = module[ path.shift() ] while path.length
 
     if module
-      controllers[ module_name ]    = new module( $root )
+      controllers[ module_name ]    = new module( $root, options )
       controllers[ module_name ].id = module_name
     else
       throw new Error( "Can't find module #{pathname}" )
